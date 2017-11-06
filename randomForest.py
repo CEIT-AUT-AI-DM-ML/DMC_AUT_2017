@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 import math
-
+import csv
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestRegressor
@@ -11,21 +11,20 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.externals import joblib
 
-# 3. Load  data.
-dataset_url = 'names3.csv'
-data = pd.read_csv (dataset_url, sep=',').drop ('id', axis=1).drop ('tavg5', axis=1).drop ('tavg4', axis=1).drop (
-    'tavg3', axis=1).drop ('tavg2', axis=1).drop ('tavg1', axis=1)
+# 3. Load red wine data.
+dataset_url = 'c4.csv'
+data = pd.read_csv (dataset_url, sep=',').drop ('id', axis=1)
 
 #print data.isnull().any()
 
 #4. Split data into training and test sets
 y = data.avg5
-X = data.drop('avg5' , axis=1)#.drop('id' , axis=1).drop('tavg5' , axis=1)
+X = data.drop('avg5' , axis=1)#.drop('id' , axis=1)#.drop('tavg5' , axis=1)
 
 # y = data.quality
 # X = data.drop('quality', axis=1)
 X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                    test_size=0.2,
+                                                    test_size=0.5,
                                                     random_state=123,
                                                     )
 
@@ -60,3 +59,22 @@ print math.sqrt(mean_squared_error(y_train, pred2))
 # 10. Save model for future use
 joblib.dump(clf, 'rf_regressor.pkl')
 # To load: clf2 = joblib.load('rf_regressor.pkl')
+# with open ('forest_out.csv', 'w') as name:
+#     fieldnames = ['id',
+#                   'avg1',
+#                   'avg2',
+#                   'avg3',
+#                   'avg4', 'avg5'
+#                   ]
+#
+#     writer = csv.DictWriter (name, fieldnames=fieldnames)
+#     writer.writeheader ()
+#
+#     for i in range(len(pred)):
+#         writer.writerow ({'id': id,
+#                           'avg1': data.avg1.values[i],
+#                           'avg3': data.avg2.values[i],
+#                           'avg4': data.avg3.values[i],
+#                           'avg5': data.avg4.values[i],
+#                           'avg6': pred[i]
+#                           })
